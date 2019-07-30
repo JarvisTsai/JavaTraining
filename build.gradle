@@ -66,11 +66,6 @@ jacocoTestReport {
     }
 }
 
-java {
-    sourceCompatibility = "VERSION_1_8"
-    targetCompatibility = "VERSION_1_8"
-}
-
 test.dependsOn copyResources
 jacocoTestReport.dependsOn test
 jacocoTestCoverageVerification.dependsOn jacocoTestReport

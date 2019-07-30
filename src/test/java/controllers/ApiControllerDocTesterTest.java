@@ -54,7 +54,7 @@ public class ApiControllerDocTesterTest extends NinjaDocTester {
     
     @Test
     public void testGetIndex() {
-    
+
         Response response = makeRequest(
                 Request.GET().url(
                         testServerUrl().path(URL_INDEX)));
