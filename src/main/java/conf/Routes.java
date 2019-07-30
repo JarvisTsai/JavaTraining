@@ -30,6 +30,9 @@ public class Routes implements ApplicationRoutes {
         
         router.GET().route("/").with(ApplicationController::index);
         router.GET().route("/hello_world.json").with(ApplicationController::helloWorldJson);
+        router.GET().route("/welcome").with(ApplicationController::welcome);
+
+        router.POST().route("/login").with(ApplicationController::login);
         
  
         ///////////////////////////////////////////////////////////////////////

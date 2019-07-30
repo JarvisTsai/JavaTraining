@@ -33,12 +33,17 @@
 package controllers;
 
 
+import dtos.UserLogin;
 import org.junit.Test;
 
 import ninja.NinjaDocTester;
 import org.doctester.testbrowser.Request;
 import org.doctester.testbrowser.Response;
 import org.hamcrest.CoreMatchers;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 
@@ -75,4 +80,48 @@ public class ApiControllerDocTesterTest extends NinjaDocTester {
     
     }
 
+    @Test
+    public void testPostLoginSuccess() {
+
+        Map loginForm = new HashMap();
+        loginForm.put("username","admin");
+        loginForm.put("password","1234");
+
+        Response response = makeRequest(
+                Request.POST().url(
+                        testServerUrl().path("/login")).formParameters(loginForm));
+
+        assertThat(response.payload, containsString("Login Success"));
+
+    }
+
+    @Test
+    public void testPostLoginFailure() {
+
+        Map loginForm = new HashMap();
+        loginForm.put("username","admin");
+        loginForm.put("password","5555");
+
+        Response response = makeRequest(
+                Request.POST().url(
+                        testServerUrl().path("/login")).formParameters(loginForm));
+
+        assertThat(response.payload, containsString("Hello World!"));
+
+    }
+
+    @Test
+    public void testPostLoginFailureWrongUser() {
+
+        Map loginForm = new HashMap();
+        loginForm.put("username","wrong");
+        loginForm.put("password","1234");
+
+        Response response = makeRequest(
+                Request.POST().url(
+                        testServerUrl().path("/login")).formParameters(loginForm));
+
+        assertThat(response.payload, containsString("Hello World!"));
+
+    }
 }

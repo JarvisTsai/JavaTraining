@@ -8,6 +8,7 @@ plugins {
     id 'java'
     id 'idea'
     id "org.gretty" version "2.3.1"
+    id 'jacoco'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -18,15 +19,76 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        output.resourcesDir = "$buildDir/classes/java/main"
+    }
+    test {
+        output.resourcesDir = "$buildDir/classes/java/main"
+    }
+}
+
+task copyResources {
+    doLast {
+        copy {
+            from 'src/main/java'
+            include '**/*.ftl.html'
+            into sourceSets.main.output.resourcesDir
+        }
+    }
+}
+
 dependencies {
     compile 'org.ninjaframework:ninja-core:6.5.0',
             'org.ninjaframework:ninja-servlet:6.5.0'
 
+    testCompile group: 'org.ninjaframework', name: 'ninja-test-utilities', version: '6.5.0'
+
 }
 
 gretty {
-    servletContainer="jetty9.4"
+    servletContainer = "jetty9.4"
     httpPort = 8081
     contextPath = ''
     systemProperty 'ninja.mode', 'dev'
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+java {
+    sourceCompatibility = "VERSION_1_8"
+    targetCompatibility = "VERSION_1_8"
+}
+
+test.dependsOn copyResources
+jacocoTestReport.dependsOn test
+jacocoTestCoverageVerification.dependsOn jacocoTestReport
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            excludes = ['dtos.*']
+            limit {
+                minimum = 1
+            }
+        }
+    }
+}
+
+task prepush(dependsOn: jacocoTestCoverageVerification) {
+    doLast {
+
+    }
 }
