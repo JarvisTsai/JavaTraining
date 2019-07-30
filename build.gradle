@@ -39,10 +39,12 @@ task copyResources {
 }
 
 dependencies {
-    compile 'org.ninjaframework:ninja-core:6.5.0',
-            'org.ninjaframework:ninja-servlet:6.5.0'
+    implementation group: 'org.ninjaframework', name: 'ninja-core', version: "${ninjaVersion}"
+    implementation group: 'org.ninjaframework', name: 'ninja-servlet', version: "${ninjaVersion}"
+    implementation group: 'org.ninjaframework', name: 'ninja-jaxy-routes', version: "${ninjaVersion}"
 
-    testCompile group: 'org.ninjaframework', name: 'ninja-test-utilities', version: '6.5.0'
+
+    testImplementation group: 'org.ninjaframework', name: 'ninja-test-utilities', version: "${ninjaVersion}"
 
 }
 
